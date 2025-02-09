@@ -2,9 +2,8 @@ export type QuestionType = 'select' | 'input' | 'summary';
 
 export interface BaseSurveyQuestion {
   id: string;
-  screenType: QuestionType;
+  screenType: string;
   questionText: string;
-  previous?: string;
   next?: Record<string, string> | string;
 }
 
