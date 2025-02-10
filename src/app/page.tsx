@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { BaseSurveyQuestion } from "./types/survey";
-import surveyConfig from "@/src/app/data/surveyConfig.json";
+import { BaseSurveyQuestion } from "../types/survey";
+import surveyConfig from "@/src/data/surveyConfig.json";
 import styles from "./style.module.css";
 import clsx from "clsx";
-import Button from "./components/ui/Button";
-import Header from "./components/layout/Header";
+import Button from "../components/ui/Button";
+import Header from "../components/layout/Header";
 
 export default function HomePage() {
   const router = useRouter();
