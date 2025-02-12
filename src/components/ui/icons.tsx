@@ -1,5 +1,6 @@
 import ChevronLeft from "@/public/chevron-left.svg";
 import ChevronRight from "@/public/chevron-right.svg";
-import Logo from "@/public/logo.svg";
+import LogoWhite from "@/public/logo-white.svg";
+import LogoBlack from "@/public/logo-black.svg";
 
-export { Logo, ChevronLeft, ChevronRight };
+export { LogoWhite, LogoBlack, ChevronLeft, ChevronRight };

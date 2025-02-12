@@ -1,28 +1,15 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import { BaseSurveyQuestion } from "../types/survey";
 import surveyConfig from "@/src/data/surveyConfig.json";
-import styles from "./style.module.css";
-import clsx from "clsx";
 import Button from "../components/ui/Button";
-import Header from "../components/layout/Header";
+import Header from "../components/Header";
+import Link from "next/link";
 
 export default function HomePage() {
-  const router = useRouter();
-
-  const firstQuestion: BaseSurveyQuestion | undefined =
-    surveyConfig.questions[0];
-
-  const handleStartSurvey = () => {
-    if (firstQuestion) {
-      router.push(`/${firstQuestion.id}`);
-    }
-  };
+  const firstQuestion = surveyConfig.questions[0] as BaseSurveyQuestion;
 
   return (
-    <div className={clsx(styles.gradientBackground, "min-h-screen")}>
-      <Header />
+    <div className="min-h-screen bg-purple-gradient">
+      <Header question={firstQuestion} />
 
       <div className="flex flex-col items-center justify-center">
         <div className="w-full max-w-80 text-center">
@@ -35,9 +22,9 @@ export default function HomePage() {
             astrological insights, based on your answers. We&apos;re going to
             change your relationship with astrology.
           </p>
-          <Button className="w-full" onClick={handleStartSurvey}>
-            Start Survey
-          </Button>
+          <Link href={`/question/${firstQuestion.id}`}>
+            <Button className="w-full">Start Survey</Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,26 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit';
-import userAnswersReducer, { initialState as userAnswersInitial } from './userAnswersSlice';
-import { saveState, loadState } from '../utils/sessionStorage';
-import { UserAnswersState } from '../types/store';
-
-const USER_ANSWERS_KEY = 'userAnswers';
-
-const preloadedUserAnswers: UserAnswersState | undefined = loadState(USER_ANSWERS_KEY);
+"use client";
+import { configureStore } from "@reduxjs/toolkit";
+import userAnswersReducer from "./userAnswersSlice";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const store = configureStore({
-  reducer: {
-    userAnswers: userAnswersReducer,
-  },
-  preloadedState: {
-    userAnswers: preloadedUserAnswers || userAnswersInitial,
-  },
-});
-
-store.subscribe(() => {
-  saveState(USER_ANSWERS_KEY, store.getState().userAnswers);
+  reducer: { userAnswers: userAnswersReducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-export default store;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export { store };

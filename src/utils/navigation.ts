@@ -1,22 +1,22 @@
-import { SurveyQuestion } from '../types/survey';
-import { RootState } from '../store';
+import { BaseSurveyQuestion } from "../types/survey";
+import { RootState } from "../store";
 
 export function getNextQuestionId(
-  currentQuestion: SurveyQuestion,
-  answers: RootState['userAnswers']['answers'],
+  currentQuestion: BaseSurveyQuestion,
+  answers: RootState["userAnswers"]["answers"],
 ): string | null {
-  if (typeof currentQuestion.next === 'string') {
+  if (typeof currentQuestion.next === "string") {
     return currentQuestion.next;
   }
 
-  if (typeof currentQuestion.next === 'object') {
+  if (typeof currentQuestion.next === "object") {
     const answer = answers[currentQuestion.id];
-    return currentQuestion.next[answer] || null;
+    return currentQuestion.next?.[answer] || null;
   }
 
   return null;
 }
 
-export function isSurveyComplete(currentQuestion: SurveyQuestion): boolean {
-  return currentQuestion.screenType === 'summary';
+export function isSurveyComplete(currentQuestion: BaseSurveyQuestion): boolean {
+  return currentQuestion.screenType === "summary";
 }

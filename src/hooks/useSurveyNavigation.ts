@@ -1,64 +1,86 @@
-import { useCallback } from 'react';
-import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
-import { SurveyQuestion } from '../types/survey';
-import { RootState } from '../store';
-import { goBack } from '../store/userAnswersSlice';
+import { useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { BaseSurveyQuestion } from "../types/survey";
+import { RootState, useAppDispatch, useAppSelector } from "../store";
+import { goBack, goForward } from "../store/userAnswersSlice";
+import survey from "../data/surveyConfig.json";
 
 interface UseSurveyNavigation {
-  getNextQuestionId: (currentQuestion: SurveyQuestion) => string | null;
+  getNextQuestionId: (currentQuestion: BaseSurveyQuestion) => string | null;
   handlePrevious: () => void;
-  handleNext: (question: SurveyQuestion) => void;
-  isSurveyComplete: (currentQuestion: SurveyQuestion) => boolean;
+  handleNext: () => void;
+  isAnswered: boolean;
+  hasPrevious: boolean;
 }
 
-export function useSurveyNavigation(): UseSurveyNavigation {
+export function useSurveyNavigation(
+  currentQuestion: BaseSurveyQuestion,
+): UseSurveyNavigation {
   const router = useRouter();
-  const dispatch = useDispatch();
-  const answers = useSelector((state: RootState) => state.userAnswers.answers);
-  const history = useSelector((state: RootState) => state.userAnswers.history);
+  const dispatch = useAppDispatch();
 
-  const isSurveyComplete = useCallback((currentQuestion: SurveyQuestion): boolean => {
-    return currentQuestion.screenType === 'summary';
-  }, []);
-
-  const getNextQuestionId = useCallback(
-    (currentQuestion: SurveyQuestion): string | null => {
-      if (typeof currentQuestion.next === 'string') {
-        return currentQuestion.next;
-      }
-
-      if (typeof currentQuestion.next === 'object') {
-        const answer = answers[currentQuestion.id];
-        return currentQuestion.next[answer] || null;
-      }
-
-      return null;
-    },
-    [answers],
+  const answers = useAppSelector(
+    (state: RootState) => state.userAnswers.answers,
   );
 
+  const history = useAppSelector(
+    (state: RootState) => state.userAnswers.history,
+  );
+
+  const isFirstQuestion =
+    survey.questions.findIndex((q) => q.id === currentQuestion.id) === 0;
+  const isAnswered = !!answers[currentQuestion.id];
+  const hasPrevious = !isFirstQuestion && history.length >= 1;
+
+  const getNextQuestionId = useCallback((): string | null => {
+    if (typeof currentQuestion.next === "string") {
+      return currentQuestion.next;
+    }
+
+    if (typeof currentQuestion.next === "object") {
+      const answer = answers[currentQuestion.id];
+      return currentQuestion.next?.[answer] || null;
+    }
+
+    return null;
+  }, [answers, currentQuestion]);
+
   const handlePrevious = useCallback(() => {
+    if (history.length === 1) {
+      dispatch(goBack());
+      router.push(`/question/${history[0]}`);
+    }
     if (history.length > 1) {
       dispatch(goBack());
-      router.push(`/${history[history.length - 2]}`);
+      router.push(`/question/${history[history.length - 1]}`);
     }
   }, [dispatch, history, router]);
 
-  const handleNext = useCallback(
-    (question: SurveyQuestion) => {
-      if (isSurveyComplete(question)) {
-        console.log('Survey Completed:', answers);
-        return;
-      }
+  const handleNext = useCallback(() => {
+    if (currentQuestion.next === "summary") {
+      router.push("/summary");
+      return;
+    }
 
-      const nextQuestionId = getNextQuestionId(question);
-      if (nextQuestionId) {
-        router.push(`/${nextQuestionId}`);
-      }
-    },
-    [answers, getNextQuestionId, isSurveyComplete, router],
-  );
+    dispatch(goForward({ questionId: currentQuestion.id }));
 
-  return { getNextQuestionId, handlePrevious, handleNext, isSurveyComplete };
+    const nextQuestionId = getNextQuestionId();
+    if (nextQuestionId) {
+      router.push(`/question/${nextQuestionId}`);
+    }
+  }, [
+    currentQuestion.id,
+    currentQuestion.next,
+    dispatch,
+    getNextQuestionId,
+    router,
+  ]);
+
+  return {
+    getNextQuestionId,
+    handlePrevious,
+    handleNext,
+    isAnswered,
+    hasPrevious,
+  };
 }

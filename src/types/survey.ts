@@ -1,24 +1,30 @@
-export type QuestionType = 'select' | 'input' | 'summary';
+export type QuestionType = "select" | "input";
 
+export interface ConditionalText {
+  [key: string]: {
+    [option: string]: string;
+  };
+}
+export interface KeyQuestions {
+  [key: string]: string;
+}
 export interface BaseSurveyQuestion {
   id: string;
   screenType: string;
+  additionalText?: string;
+  conditionalText?: ConditionalText;
   questionText: string;
-  next?: Record<string, string> | string;
+  next: string | Record<string, string> | null;
 }
 
 export interface SelectQuestion extends BaseSurveyQuestion {
-  screenType: 'select';
+  screenType: "select";
   options: string[];
 }
 
 export interface InputQuestion extends BaseSurveyQuestion {
-  screenType: 'input';
+  screenType: "input";
   placeholder?: string;
 }
 
-export interface SummaryQuestion extends BaseSurveyQuestion {
-  screenType: 'summary';
-}
-
-export type SurveyQuestion = SelectQuestion | InputQuestion | SummaryQuestion;
+export type SurveyQuestion = SelectQuestion | InputQuestion;
