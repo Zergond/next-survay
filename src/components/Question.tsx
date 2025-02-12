@@ -10,7 +10,7 @@ interface QuestionScreenProps {
   question: SurveyQuestion;
 }
 
-export default function Question({ question }: QuestionScreenProps) {
+const Question = ({ question }: QuestionScreenProps) => {
   const dispatch = useAppDispatch();
   const { answers } = useAppSelector((state: RootState) => state.userAnswers);
 
@@ -56,4 +56,6 @@ export default function Question({ question }: QuestionScreenProps) {
       )}
     </div>
   );
-}
+};
+
+export default Question;

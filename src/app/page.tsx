@@ -4,7 +4,7 @@ import Button from "../components/ui/Button";
 import Header from "../components/Header";
 import Link from "next/link";
 
-export default function HomePage() {
+const HomePage = () => {
   const firstQuestion = surveyConfig.questions[0] as BaseSurveyQuestion;
 
   return (
@@ -29,4 +29,6 @@ export default function HomePage() {
       </div>
     </div>
   );
-}
+};
+
+export default HomePage;

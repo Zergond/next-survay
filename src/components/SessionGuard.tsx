@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { RootState, useAppSelector } from "../store";
 import { useRouter } from "next/navigation";
 
-export default function SessionGuard() {
+const SessionGuard = () => {
   const router = useRouter();
   const { history } = useAppSelector((state: RootState) => state.userAnswers);
 
@@ -14,4 +14,6 @@ export default function SessionGuard() {
   }, [history.length, router]);
 
   return null;
-}
+};
+
+export default SessionGuard;

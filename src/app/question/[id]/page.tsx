@@ -14,7 +14,7 @@ interface QuestionPageParams {
   params: { id: string };
 }
 
-export default async function QuestionPage({ params }: QuestionPageParams) {
+const QuestionPage = async ({ params }: QuestionPageParams) => {
   const { id } = await params;
   const question = survey.questions.find((q) => q.id === id) as SurveyQuestion;
 
@@ -30,4 +30,6 @@ export default async function QuestionPage({ params }: QuestionPageParams) {
       </div>
     </div>
   );
-}
+};
+
+export default QuestionPage;
