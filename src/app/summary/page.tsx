@@ -5,10 +5,12 @@ import Button from "@/src/components/ui/Button";
 import { clearState } from "@/src/store/userAnswersSlice";
 import { replacePlaceholders } from "@/src/utils/replacePlaceholders";
 import { BaseSurveyQuestion } from "@/src/types/survey";
+import { useRouter } from "next/navigation";
 
 const Summary = () => {
   const { answers } = useAppSelector((state) => state.userAnswers);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const answeredQuestions = Object.entries(answers).map(
     ([questionId, answer]) => {
@@ -30,6 +32,7 @@ const Summary = () => {
   );
 
   const onFinish = () => {
+    router.replace("/");
     dispatch(clearState());
   };
 

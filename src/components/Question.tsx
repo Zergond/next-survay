@@ -29,7 +29,7 @@ export default function Question({ question }: QuestionScreenProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 text-center">
         <h2 className="text-xl font-bold">{text}</h2>
         {question?.additionalText && (
           <h3 className="text-lg font-bold">{question?.additionalText}</h3>

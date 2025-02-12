@@ -9,7 +9,7 @@ export default function SessionGuard() {
 
   useEffect(() => {
     if (history.length === 0) {
-      router.push("/");
+      router.replace("/");
     }
   }, [history.length, router]);
 

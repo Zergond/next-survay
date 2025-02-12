@@ -47,18 +47,18 @@ export function useSurveyNavigation(
 
   const handlePrevious = useCallback(() => {
     if (history.length === 1) {
-      dispatch(goBack());
+      dispatch(goBack({ questionId: currentQuestion.id }));
       router.push(`/question/${history[0]}`);
     }
     if (history.length > 1) {
-      dispatch(goBack());
+      dispatch(goBack({ questionId: currentQuestion.id }));
       router.push(`/question/${history[history.length - 1]}`);
     }
-  }, [dispatch, history, router]);
+  }, [currentQuestion.id, dispatch, history, router]);
 
   const handleNext = useCallback(() => {
     if (currentQuestion.next === "summary") {
-      router.push("/summary");
+      router.replace("/summary");
       return;
     }
 

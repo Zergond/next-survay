@@ -20,7 +20,10 @@ const userAnswersSlice = createSlice({
       state.answers[questionId] = answer;
     },
 
-    goBack(state) {
+    goBack(state, action: PayloadAction<{ questionId: string }>) {
+      const { questionId } = action.payload;
+      delete state.answers[questionId];
+
       if (state.history.length > 1) {
         state.history.pop();
       }
